@@ -5,6 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import MoodSelector from '../components/MoodSelector.vue'
+import MoodSelector from '../components/pages/MoodSelector.vue'
 
 </script>

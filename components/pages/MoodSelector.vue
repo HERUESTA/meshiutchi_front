@@ -16,7 +16,7 @@
       </button>
     </div>
 
-    <button class="confirm-button" @click="comfirmMood">決定</button>
+    <button class="confirm-button" @click="confirmMood">決定</button>
   </div>
 </template>
 
@@ -56,7 +56,7 @@ const selectMood = (mood: string) => {
   emoji.value = getEmojiForMood(mood)
 }
 
-const comfirmMood = () => {
+const confirmMood = () => {
   // ここでレシピ提案処理などを追加
 }
 </script>
