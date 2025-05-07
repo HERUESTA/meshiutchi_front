@@ -114,6 +114,8 @@ const showCelebration = ref(false)
 watch(allStepsDone, (done) => {
   if (done) {
     showModal.value = true
+  } else {
+    showModal.value = false
   }
 })
 </script>
