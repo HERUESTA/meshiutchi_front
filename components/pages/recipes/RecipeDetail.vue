@@ -59,9 +59,9 @@
 
           <!-- 完成モーダル -->
           <div v-if="showModal" class="modal-overlay">
-            <div class="modal">
-              <p>🎉 全ての手順が完了しました！完成しましたか？</p>
-              <button @click="() => { showModal = false; showCelebration = true }">はい</button>
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+              <p id="modal-title">🎉 全ての手順が完了しました！<br>完成しましたか？</p>
+              <button @click="showModal = false; showCelebration = true">はい</button>
             </div>
           </div>
           
