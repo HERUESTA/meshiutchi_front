@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useApi } from '@/components/pages/useApi'
 
 const moods = ref([
   { id: 1, label: '元気' },
@@ -35,6 +36,8 @@ const moods = ref([
 const selectedMood = ref<string | null>(null)
 const emoji = ref<string | null>(null)
 const router = useRouter()
+
+const { fetchRecipesByMood, error, isLoading } = useApi()
 
 const getEmojiForMood = (mood: string): string => {
   switch (mood) {
@@ -64,25 +67,15 @@ const confirmMood = async () => {
     return
   }
 
-  try {
-    const response = await fetch('/api/v1/mood_recipes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ mood: selectedMood.value }),
-    })
+  await fetchRecipesByMood(selectedMood.value)
 
-    if (!response.ok) {
-      throw new Error('APIリクエストに失敗しました')
-    }
-
-    // 成功時に /recipes ページに遷移
-    router.push('/recipes')
-  } catch (error) {
-    console.error('エラーが発生しました:', error)
-    alert('レシピの提案に失敗しました。もう一度お試しください。')
+  if (error.value) {
+    alert(error.value)
+    return
   }
+
+  // 成功時に /recipes ページに遷移
+  router.push('/recipes')
 }
 </script>
 
