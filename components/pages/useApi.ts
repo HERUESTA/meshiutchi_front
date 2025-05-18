@@ -10,7 +10,7 @@ export const useApi = () => {
     error.value = null
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/mood_recipes`, {
+      const response = await fetch(`https://meshiuchi-back.fly.dev/api/v1/mood_recipes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
