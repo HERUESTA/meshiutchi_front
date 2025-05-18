@@ -5,8 +5,8 @@ const recipes = ref([]);
 export function useApi() {
   const fetchRecipesByMood = async (mood: string) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api/v1/mood_recipes'
-      const response = await fetch(`${apiUrl}/api/v1/mood_recipes`, {
+      const apiUrl = 'https://meshiuchi-back.fly.dev/api/v1/mood_recipes' || 'http://localhost:3000/api/v1/mood_recipes'
+      const response = await fetch(`${apiUrl}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
