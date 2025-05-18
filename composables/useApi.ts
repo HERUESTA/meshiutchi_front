@@ -5,7 +5,8 @@ const recipes = ref([]);
 export function useApi() {
   const fetchRecipesByMood = async (mood: string) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/mood_recipes', {
+      const apiUrl = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api/v1/mood_recipes'
+      const response = await fetch(`${apiUrl}/api/v1/mood_recipes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
