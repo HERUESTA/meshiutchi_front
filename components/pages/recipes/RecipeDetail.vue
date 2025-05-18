@@ -2,15 +2,15 @@
   <div class="recipe-detail">
     <!-- ヘッダー -->
     <div class="header">
-      <div class="main-title">親子丼</div>
+      <div class="main-title">{{ recipe.title }}</div>
     </div>
 
-    <div class="meta">
-      <span>🕒 15分</span>
-      <span>👥 2人前</span>
-    </div>
+    <!-- <div class="meta">
+      <span>🕒 {{ recipe.durationMinutes }}分</span>
+      <span>👥 {{ recipe.servings }}人前</span>
+    </div> -->
 
-    <p class="description">ふわふわ卵の優しい味わい。忙しい日にぴったりの定番メニュー。</p>
+    <p class="description">{{ recipe.description }}</p>
 
     <!-- タブ -->
     <div class="tabs">
@@ -29,15 +29,16 @@
       <!-- 材料 -->
       <div v-if="selectedTab === '材料'" class="card">
         <div class="section-title">
-          🥕 材料 <span class="people">2人前</span>
+          🥕 材料 
+        <!-- <span class="people">2人前</span> -->
         </div>
         <div class="ingredients">
           <div v-for="(item, index) in ingredients" :key="index" class="ingredient-row">
             <label class="ingredient-check">
               <input type="checkbox" v-model="ingredientStates[index]" />
-              <span :class="{ checked: ingredientStates[index] }">{{ item.name }}</span>
+              <span :class="{ checked: ingredientStates[index] }">{{ item }}</span>
             </label>
-            <span class="amount">{{ item.amount }}</span>
+            <!-- <span class="amount">{{ item.amount }}</span> -->
           </div>
         </div>
       </div>
@@ -76,49 +77,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, toRef } from 'vue'
+import type { Recipe } from '@/types/Recipe'
+
+const props = defineProps<{ recipe: Recipe }>()
+const recipe = toRef(props, 'recipe')
 
 const tabs = ['材料', '作り方']
 const selectedTab = ref('材料')
 
-const ingredients = [
-  { name: '鶏もも肉', amount: '200g' },
-  { name: '玉ねぎ', amount: '1/2個' },
-  { name: '卵', amount: '3個' },
-  { name: 'めんつゆ（3倍濃縮）', amount: '大さじ3' },
-  { name: '水', amount: '大さじ3' },
-  { name: '砂糖', amount: '大さじ1' },
-  { name: 'みつば', amount: '適量' },
-  { name: 'ご飯', amount: '茶碗2杯分' }
-]
+// ingredients, steps を recipe から取り出す
+const ingredients = computed(() => recipe.value.ingredients ?? [])
+console.log('ingredients', ingredients.value)
+const steps = computed(() => recipe.value.steps ?? [])
 
-const ingredientStates = ref<boolean[]>(ingredients.map(() => false))
+const ingredientStates = ref<boolean[]>(ingredients.value.map(() => false))
+const stepStates = ref<boolean[]>(steps.value.map(() => false))
 
-const steps = [
-  '鶏もも肉は一口大に切り、玉ねぎは薄切りにします。',
-  'フライパンにめんつゆ、水、砂糖を入れて火にかけ、沸騰したら鶏肉を入れます。',
-  '鶏肉に火が通ったら玉ねぎを加え、しんなりするまで煮ます。',
-  '溶き卵を回し入れ、半熟状態になったら火を止めます。',
-  'どんぶりにご飯を盛り、具材をのせ、みつばを散らして完成です。'
-]
-
-const stepStates = ref<boolean[]>(steps.map(() => false))
-
-const allStepsDone = computed(() => {
-  return stepStates.value.every(done => done)
-})
+const allStepsDone = computed(() => stepStates.value.every(done => done))
 
 const showModal = ref(false)
 const showCelebration = ref(false)
 
 watch(allStepsDone, (done) => {
-  if (done) {
-    showModal.value = true
-  } else {
-    showModal.value = false
-  }
+  showModal.value = done
 })
 </script>
+
 
 <style scoped>
 .recipe-detail {

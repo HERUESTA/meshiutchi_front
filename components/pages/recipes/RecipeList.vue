@@ -4,28 +4,29 @@
       <h1 class="title">おすすめのレシピ</h1>
     </div>
     <div class="recipe-list">
-      <div v-for="recipe in recipes" :key="recipe.id" class="recipe-card">
+      <NuxtLink
+        v-for="(recipe, index) in recipes"
+        :key="index"
+        :to="`/recipes/${index}`"
+        class="recipe-card"
+      >
         <h2 class="recipe-title">{{ recipe.title }}</h2>
         <p class="recipe-description">{{ recipe.description }}</p>
-        <div class="recipe-meta">
-          <div class="meta-item">🕒 {{ recipe.durationrationMinutes }}分</div>
+        <!-- <div class="recipe-meta">
+          <div class="meta-item">🕒 {{ recipe.durationMinutes }}分</div>
           <div class="meta-item">👥 {{ recipe.servings }}人前</div>
-        </div>
-      </div>
+        </div> -->
+      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useApi } from '@/components/pages/useApi'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-const recipes = ref([
-  { id: 1, title: 'レシピ1', description: '説明1', durationrationMinutes: 30, servings: 2 },
-  { id: 2, title: 'レシピ2', description: '説明2', durationrationMinutes: 45, servings: 3 },
-  { id: 3, title: 'レシピ3', description: '説明3', durationrationMinutes: 60, servings: 4 },
-  { id: 4, title: 'レシピ4', description: '説明4', durationrationMinutes: 15, servings: 1 },
-  { id: 5, title: 'レシピ5', description: '説明5', durationrationMinutes: 20, servings: 4 },
-]);
+const { recipes } = useApi()
 </script>
 
 <style scoped>
@@ -67,6 +68,11 @@ const recipes = ref([
   padding: 16px;
   background-color: #ffffff;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+.recipe-card:hover {
+  transform: scale(1.02);
 }
 
 .recipe-title {
